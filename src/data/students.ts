@@ -1,0 +1,44 @@
+import type { Student } from "../types";
+
+export const mockStudents: Student[] = [
+  {
+    id: "s1",
+    name: "Alice Johnson",
+    email: "alice@example.com",
+    password: "alice123",
+    paymentStatus: "paid",
+    roomId: "r1",
+  },
+  {
+    id: "s2",
+    name: "Brian Clarke",
+    email: "brian@example.com",
+    password: "brian123",
+    paymentStatus: "unpaid",
+    roomId: null,
+  },
+  {
+    id: "s3",
+    name: "Chloe Kim",
+    email: "chloe@example.com",
+    password: "chloe123",
+    paymentStatus: "paid",
+    roomId: "r2",
+  },
+  {
+    id: "s4",
+    name: "Derek Lee",
+    email: "derek@example.com",
+    password: "derek123",
+    paymentStatus: "paid",
+    roomId: null,
+  },
+  {
+    id: "s5",
+    name: "Emma Davis",
+    email: "emma@example.com",
+    password: "emma123",
+    paymentStatus: "paid",
+    roomId: null,
+  },
+];
