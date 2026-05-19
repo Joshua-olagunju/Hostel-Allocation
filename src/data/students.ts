@@ -41,4 +41,20 @@ export const mockStudents: Student[] = [
     paymentStatus: "paid",
     roomId: null,
   },
+   {
+    id: "s6",
+    name: "Emma Daviss",
+    email: "emmas@example.com",
+    password: "emma123",
+    paymentStatus: "paid",
+    roomId: null,
+  },
+   {
+    id: "s7",
+    name: "Emma Davisss",
+    email: "emmass@example.com",
+    password: "emma123",
+    paymentStatus: "paid",
+    roomId: null,
+  },
 ];

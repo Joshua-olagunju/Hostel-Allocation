@@ -38,11 +38,33 @@ const buildStudentSession = (student: Student): UserSession => ({
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [students, setStudents] = useState<Student[]>(() => {
     const saved = loadFromStorage<AppState>(STORAGE_KEY)
-    return saved?.students ?? initialState.students
+    if (!saved?.students) return initialState.students
+
+    const savedMap = new Map(saved.students.map((student) => [student.id, student]))
+    const merged = [...saved.students]
+
+    for (const student of mockStudents) {
+      if (!savedMap.has(student.id)) {
+        merged.push(student)
+      }
+    }
+
+    return merged
   })
   const [rooms, setRooms] = useState<Room[]>(() => {
     const saved = loadFromStorage<AppState>(STORAGE_KEY)
-    return saved?.rooms ?? initialState.rooms
+    if (!saved?.rooms) return initialState.rooms
+
+    const savedMap = new Map(saved.rooms.map((room) => [room.id, room]))
+    const merged = [...saved.rooms]
+
+    for (const room of mockRooms) {
+      if (!savedMap.has(room.id)) {
+        merged.push(room)
+      }
+    }
+
+    return merged
   })
   const [user, setUser] = useState<UserSession | null>(() => {
     return loadFromStorage<UserSession>(AUTH_KEY)
