@@ -6,6 +6,7 @@ export interface Student {
   email: string
   password: string
   paymentStatus: PaymentStatus
+  matricNo:string
   roomId: string | null
 }
 

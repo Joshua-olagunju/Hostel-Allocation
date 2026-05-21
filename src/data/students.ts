@@ -7,6 +7,7 @@ export const mockStudents: Student[] = [
     email: "alice@example.com",
     password: "alice123",
     paymentStatus: "paid",
+    matricNo: "20201101",
     roomId: "r1",
   },
   {
@@ -15,6 +16,7 @@ export const mockStudents: Student[] = [
     email: "brian@example.com",
     password: "brian123",
     paymentStatus: "unpaid",
+    matricNo: "20201102",
     roomId: null,
   },
   {
@@ -23,6 +25,7 @@ export const mockStudents: Student[] = [
     email: "chloe@example.com",
     password: "chloe123",
     paymentStatus: "paid",
+    matricNo: "20201103",
     roomId: "r2",
   },
   {
@@ -31,6 +34,7 @@ export const mockStudents: Student[] = [
     email: "derek@example.com",
     password: "derek123",
     paymentStatus: "paid",
+    matricNo: "20201104",
     roomId: null,
   },
   {
@@ -39,6 +43,7 @@ export const mockStudents: Student[] = [
     email: "emma@example.com",
     password: "emma123",
     paymentStatus: "paid",
+    matricNo: "20201105",
     roomId: null,
   },
   {
@@ -47,6 +52,7 @@ export const mockStudents: Student[] = [
     email: "emmas@example.com",
     password: "emma123",
     paymentStatus: "paid",
+    matricNo: "20201106",
     roomId: null,
   },
   {
@@ -55,6 +61,7 @@ export const mockStudents: Student[] = [
     email: "emmass@example.com",
     password: "emma123",
     paymentStatus: "paid",
+    matricNo: "20201107",
     roomId: null,
   },
   {
@@ -63,6 +70,7 @@ export const mockStudents: Student[] = [
     email: "emmass@example.com",
     password: "emma123",
     paymentStatus: "paid",
+    matricNo: "20201108",
     roomId: null,
   },
   {
@@ -71,6 +79,7 @@ export const mockStudents: Student[] = [
     email: "emmass@example.com",
     password: "emma123",
     paymentStatus: "paid",
+    matricNo: "20201109",
     roomId: null,
   },
 ];
