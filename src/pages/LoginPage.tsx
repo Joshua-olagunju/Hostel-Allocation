@@ -1,11 +1,13 @@
 import { useState } from "react";
+import axios from "axios";
 
 import { Navigate, useNavigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+// import { useAppContext } from "../context/AppContext";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { IoMdLogIn } from "react-icons/io";
 import { MdErrorOutline } from "react-icons/md";
-import { FaUserShield } from "react-icons/fa";
+// import { FaUserShield } from "react-icons/fa";
+import { loginStudent } from "../api/auth";
 
 // ======================
 // Login Page Component
@@ -14,61 +16,69 @@ export const LoginPage = () => {
   const [mode] = useState<"student" | "admin">("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [adminClicks, setAdminClicks] = useState(0);
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [adminEmail, setAdminEmail] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
-  const [adminError, setAdminError] = useState<string | null>(null);
-  const { loginStudent, loginAdmin, user } = useAppContext();
-  const navigate = useNavigate();
 
-  if (user) {
-    return (
-      <Navigate to={user.type === "admin" ? "/admin" : "/student"} replace />
-    );
-  }
+  const [error, setError] = useState<string | null>(null);
+  // const [adminClicks, setAdminClicks] = useState(0);
+  // const [showAdminModal, setShowAdminModal] = useState(false);
+  // const [adminEmail, setAdminEmail] = useState("");
+  // const [adminPassword, setAdminPassword] = useState("");
+  // const [adminError, setAdminError] = useState<string | null>(null);
+  // const { loginStudent, loginAdmin, user } = useAppContext();
+  const navigate = useNavigate();
 
   const submitText = mode === "student" ? "Login as Student" : "Login as Admin";
 
   // Handle hidden admin icon clicks
-  const handleAdminIconClick = () => {
-    const newCount = adminClicks + 1;
-    setAdminClicks(newCount);
-    if (newCount === 5) {
-      setShowAdminModal(true);
-      setAdminClicks(0);
-    }
-  };
+  // const handleAdminIconClick = () => {
+  //   const newCount = adminClicks + 1;
+  //   setAdminClicks(newCount);
+  //   if (newCount === 5) {
+  //     setShowAdminModal(true);
+  //     setAdminClicks(0);
+  //   }
+  // };
 
   // ==================================================================
   // Handle form submission for student login
   // ==================================================================
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const result = loginStudent(email, password);
-    if (result) {
-      setError(result);
-      return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await loginStudent({
+        email,
+        password,
+      });
+
+      const student = res.data.student;
+
+      // optional: store user locally
+      localStorage.setItem("student", JSON.stringify(student));
+
+      navigate("/student");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.message || "Login failed");
+      } else {
+        setError("Login failed");
+      }
     }
-    setError(null);
-    navigate("/student");
   };
 
   // ==================================================================
   // Handle admin login submission
   // ==================================================================
-  const handleAdminSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const result = loginAdmin(adminEmail, adminPassword);
-    if (result) {
-      setAdminError(result);
-      return;
-    }
-    setAdminError(null);
-    setShowAdminModal(false);
-    navigate("/admin");
-  };
+  // const handleAdminSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const result = loginAdmin(adminEmail, adminPassword);
+  //   if (result) {
+  //     setAdminError(result);
+  //     return;
+  //   }
+  //   setAdminError(null);
+  //   setShowAdminModal(false);
+  //   navigate("/admin");
+  // };
 
   // ==================================================================
   //Rendered Components
@@ -78,7 +88,7 @@ export const LoginPage = () => {
       <AuthLayout
         title="Hostel Allocation Login"
         description="Welcome back! Please log in to access your dashboard and manage your hostel accommodations."
-        adminIconClick={handleAdminIconClick}
+        // adminIconClick={handleAdminIconClick}
       >
         <div className="rounded-[2rem] bg-white p-4 shadow-2xl shadow-slate-200/40 sm:p-10">
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -121,13 +131,17 @@ export const LoginPage = () => {
         </div>
       </AuthLayout>
 
-      {showAdminModal && (
+      {/* {showAdminModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-8 sm:px-6 lg:px-8">
           <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-8 shadow-2xl sm:p-10">
             <div className="mb-6 text-center">
               <FaUserShield className="mx-auto mb-3 text-2xl text-emerald-500" />
-              <h2 className="text-2xl font-semibold text-slate-900">Admin Login</h2>
-              <p className="mt-2 text-sm text-slate-600">Access the admin dashboard</p>
+              <h2 className="text-2xl font-semibold text-slate-900">
+                Admin Login
+              </h2>
+              <p className="mt-2 text-sm text-slate-600">
+                Access the admin dashboard
+              </p>
             </div>
 
             <form className="space-y-5" onSubmit={handleAdminSubmit}>
@@ -185,7 +199,7 @@ export const LoginPage = () => {
             </form>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };
