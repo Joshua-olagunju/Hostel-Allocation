@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { IoMdLogIn } from "react-icons/io";
 import { MdErrorOutline } from "react-icons/md";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaCheckCircle } from "react-icons/fa";
 // import { FaUserShield } from "react-icons/fa";
 import { loginStudent, signupStudent } from "../api/auth";
@@ -17,12 +18,17 @@ export const LoginPage = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [matricNo, setMatricNo] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successModalType, setSuccessModalType] = useState<"signup" | "login" | null>(null);
   // const [adminClicks, setAdminClicks] = useState(0);
   // const [showAdminModal, setShowAdminModal] = useState(false);
   // const [adminEmail, setAdminEmail] = useState("");
@@ -37,18 +43,29 @@ export const LoginPage = () => {
     if (showSuccessModal) {
       const timer = setTimeout(() => {
         setShowSuccessModal(false);
-        setIsSignup(false);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setMatricNo("");
+        if (successModalType === "signup") {
+          setIsSignup(false);
+          setName("");
+          setEmail("");
+          setSignupPassword("");
+          setConfirmPassword("");
+          setMatricNo("");
+        }
+        if (successModalType === "login") {
+          setLoginPassword("");
+        }
         setError(null);
         setSuccessMessage(null);
+        setSuccessModalType(null);
+
+        if (successModalType === "login") {
+          navigate("/student");
+        }
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [showSuccessModal]);
+  }, [showSuccessModal, successModalType, navigate]);
 
   // Handle hidden admin icon clicks
   // const handleAdminIconClick = () => {
@@ -70,21 +87,32 @@ export const LoginPage = () => {
 
     try {
       if (isSignup) {
+        if (signupPassword.length < 8) {
+          setError("Password must be at least 8 characters.");
+          return;
+        }
+
+        if (signupPassword !== confirmPassword) {
+          setError("Passwords do not match.");
+          return;
+        }
+
         const res = await signupStudent({
           name,
           email,
-          password,
+          password: signupPassword,
           matricNo,
         });
 
         setSuccessMessage(res.data.message || "Account created successfully!");
+        setSuccessModalType("signup");
         setShowSuccessModal(true);
         return;
       }
 
       const res = await loginStudent({
         email,
-        password,
+        password: loginPassword,
       });
 
       const student = res.data.student;
@@ -92,7 +120,9 @@ export const LoginPage = () => {
       // optional: store user locally
       localStorage.setItem("student", JSON.stringify(student));
 
-      navigate("/student");
+      setSuccessMessage("Login successful! Please wait...");
+      setSuccessModalType("login");
+      setShowSuccessModal(true);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data?.message || "Login failed");
@@ -128,7 +158,9 @@ export const LoginPage = () => {
             <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-8 shadow-2xl sm:p-10">
               <div className="mb-6 flex flex-col items-center text-center">
                 <FaCheckCircle className="mb-4 text-5xl text-emerald-500" />
-                <h2 className="text-2xl font-semibold text-slate-900">Account Created!</h2>
+                <h2 className="text-2xl font-semibold text-slate-900">
+                  {successModalType === "login" ? "Login successful!" : "Account Created!"}
+                </h2>
                 <p className="mt-2 text-sm text-slate-600">
                   {successMessage}
                 </p>
@@ -146,11 +178,11 @@ export const LoginPage = () => {
           <img
             src="/loginpageimage.png"
             alt="Hostel login illustration"
-            className="h-full  w-full object-cover"
+            className="h-auto  w-full object-cover"
           />
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 ">
           <AuthLayout
             title={isSignup ? "Create your hostel account" : "Hostel Allocation Login"}
             description={
@@ -186,16 +218,74 @@ export const LoginPage = () => {
                   />
                 </label>
 
-                <label className="block text-sm text-slate-700">
-                  Password
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    className="mt-3 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
-                  />
-                </label>
+                {isSignup ? (
+                  <>
+                    <label className="block text-sm text-slate-700">
+                      Password
+                      <div className="relative mt-3">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          required
+                          minLength={8}
+                          value={signupPassword}
+                          onChange={(event) => setSignupPassword(event.target.value)}
+                          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((current) => !current)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                        </button>
+                      </div>
+                    </label>
+
+                    <label className="block text-sm text-slate-700">
+                      Confirm password
+                      <div className="relative mt-3">
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          required
+                          minLength={8}
+                          value={confirmPassword}
+                          onChange={(event) => setConfirmPassword(event.target.value)}
+                          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword((current) => !current)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                          aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                        >
+                          {showConfirmPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                        </button>
+                      </div>
+                    </label>
+                  </>
+                ) : (
+                  <label className="block text-sm text-slate-700">
+                    Password
+                    <div className="relative mt-3">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required
+                        value={loginPassword}
+                        onChange={(event) => setLoginPassword(event.target.value)}
+                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((current) => !current)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                      </button>
+                    </div>
+                  </label>
+                )}
 
                 {isSignup && (
                   <label className="block text-sm text-slate-700">
@@ -238,6 +328,9 @@ export const LoginPage = () => {
                           setIsSignup(false);
                           setError(null);
                           setSuccessMessage(null);
+                          setSignupPassword("");
+                          setConfirmPassword("");
+                          setMatricNo("");
                         }}
                         className="font-semibold text-emerald-600 hover:text-emerald-500"
                       >
@@ -253,6 +346,7 @@ export const LoginPage = () => {
                           setIsSignup(true);
                           setError(null);
                           setSuccessMessage(null);
+                          setLoginPassword("");
                         }}
                         className="font-semibold text-emerald-600 hover:text-emerald-500"
                       >
