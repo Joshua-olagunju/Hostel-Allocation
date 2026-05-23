@@ -50,7 +50,7 @@ const loginStudent = async (req, res) => {
 
     if (!student) {
       return res.status(400).json({
-        message: "Student not found",
+        message: "There is no student associated with this account.",
       });
     }
 
