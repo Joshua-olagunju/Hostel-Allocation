@@ -12,7 +12,7 @@ export const StudentRow = ({ student, onTogglePayment }: StudentRowProps) => {
       <td className="px-4 py-3 text-xs text-slate-700">{student.email}</td>
       <td className="px-4 py-3 text-xs">
         <span
-          className={`inline-flex rounded-lg px-3 py-1 text-xs   ${
+          className={`inline-flex rounded-full px-3 py-1 text-xs   ${
             student.paymentStatus === "paid"
               ? "bg-blue-400/15 text-blue-700"
               : "bg-rose-500/15 text-rose-700"
@@ -27,10 +27,10 @@ export const StudentRow = ({ student, onTogglePayment }: StudentRowProps) => {
       <td className="px-4 py-3 text-xs">
         <button
           type="button"
-          className={`rounded-lg px-3 py-1 text-xs  transition ${
+          className={`rounded-full px-3 py-1 text-xs  transition ${
             student.paymentStatus === "paid"
-              ? "bg-rose-500 text-white hover:bg-rose-400"
-              : "bg-blue-400 text-white hover:bg-blue-400/90"
+              ? "bg-rose-400 !text-white/90 hover:bg-rose-400"
+              : "bg-blue-400 !text-white hover:bg-blue-400/90"
           }`}
           onClick={() => onTogglePayment(student.id)}
         >
