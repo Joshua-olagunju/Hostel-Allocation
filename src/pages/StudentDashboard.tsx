@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { FaCircle,  } from "react-icons/fa";
 // import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../context/useAppContext";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { RoomCard } from "../components/RoomCard";
 import type { Room } from "../types";

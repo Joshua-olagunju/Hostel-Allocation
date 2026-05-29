@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../context/useAppContext";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { StudentRow } from "../components/StudentRow";
 

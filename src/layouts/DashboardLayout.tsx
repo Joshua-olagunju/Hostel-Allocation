@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../context/useAppContext";
 import type { ReactNode } from "react";
 import { CiLogout } from "react-icons/ci";
 

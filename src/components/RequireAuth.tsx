@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { useAppContext } from '../context/AppContext'
+import { useAppContext } from '../context/useAppContext'
 
 import type { ReactNode } from 'react'
 
