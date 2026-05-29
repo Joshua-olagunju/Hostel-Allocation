@@ -14,7 +14,7 @@ export const StudentRow = ({ student, onTogglePayment }: StudentRowProps) => {
         <span
           className={`inline-flex rounded-lg px-3 py-1 text-xs   ${
             student.paymentStatus === "paid"
-              ? "bg-emerald-500/15 text-emerald-700"
+              ? "bg-blue-400/15 text-blue-700"
               : "bg-rose-500/15 text-rose-700"
           }`}
         >
@@ -30,7 +30,7 @@ export const StudentRow = ({ student, onTogglePayment }: StudentRowProps) => {
           className={`rounded-lg px-3 py-1 text-xs  transition ${
             student.paymentStatus === "paid"
               ? "bg-rose-500 text-white hover:bg-rose-400"
-              : "bg-emerald-500 text-white hover:bg-emerald-400"
+              : "bg-blue-400 text-white hover:bg-blue-400/90"
           }`}
           onClick={() => onTogglePayment(student.id)}
         >

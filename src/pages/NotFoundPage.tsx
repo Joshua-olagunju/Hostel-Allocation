@@ -16,7 +16,7 @@ export const NotFoundPage = () => {
         </p>
         <Link
           to="/"
-          className="mt-8 inline-flex rounded-3xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
+          className="mt-8 inline-flex rounded-3xl bg-blue-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-blue-400/90"
         >
           Return to Login
         </Link>

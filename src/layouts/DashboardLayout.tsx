@@ -27,7 +27,7 @@ export const DashboardLayout = ({
               <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
                 Dashboard
               </p>
-              <h1 className="mt-2 text-2xl font-[500] text-emerald-500">
+              <h1 className="mt-2 text-2xl font-[600] text-blue-400">
                 {title}
               </h1>
               <p className="max-w-2xl text-sm leading-7 text-slate-600">
@@ -52,7 +52,7 @@ export const DashboardLayout = ({
              <button
                 type="button"
                 onClick={logout}
-                className="flex items-center gap-2 rounded-sm bg-red-500 !font-[600] px-4 py-2 !text-xs text-white"
+                className="flex items-center gap-2 rounded-sm bg-red-500 !font-[600] px-4 py-2 !text-xs !text-white"
               >
                 <CiLogout size={16} className="!font-[600]" />
                 Logout

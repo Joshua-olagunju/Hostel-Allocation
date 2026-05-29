@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { FaCircle, FaDoorOpen } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { FaCircle,  } from "react-icons/fa";
+// import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { RoomCard } from "../components/RoomCard";
@@ -11,8 +11,8 @@ import { FiHome } from "react-icons/fi";
 // Student Dashboard Component
 // ==============================
 export const StudentDashboard = () => {
-  const { user, rooms, students, selectRoom, logout } = useAppContext();
-  const navigate = useNavigate();
+  const { user, rooms, students, selectRoom } = useAppContext();
+  // const navigate = useNavigate();
   const blocks = useMemo(() => {
     return rooms.reduce<Record<string, Room[]>>((acc, room) => {
       acc[room.block] = acc[room.block] ?? [];
@@ -37,16 +37,16 @@ export const StudentDashboard = () => {
           <span className="w-fit inline-flex items-center gap-2 !text-xs rounded-sm bg-slate-50 px-4 py-2 text-slate-700">
             <FiHome size={16} /> Assigned room: {studentRoomId ?? "None"}
           </span>
-          <button
+          {/* <button
             type="button"
             onClick={() => {
               logout();
               navigate("/");
             }}
-            className="w-fit inline-flex items-center gap-2 rounded-sm bg-rose-500 px-4 py-2 !text-xs font-semibold text-white transition hover:bg-rose-400"
+            className="w-fit inline-flex items-center gap-2 rounded-sm bg-rose-500 px-4 py-2 !text-xs font-semibold !text-white transition hover:bg-rose-400"
           >
             <FaDoorOpen /> Sign out
-          </button>
+          </button> */}
         </div>
       }
     >
@@ -57,12 +57,12 @@ export const StudentDashboard = () => {
               <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
                 Current status
               </p>
-              <h2 className="mt-2 text-2xl font-semibold text-emerald-500">
+              <h2 className="mt-2 text-2xl font-semibold text-blue-400">
                 Room availability
               </h2>
             </div>
             <div className="text-xs inline-flex items-center gap-2 rounded-sm bg-slate-50 px-4 py-3 text-slate-700">
-              <FaCircle size={10} className="text-green-500 animate-pulse" />{" "}
+              <FaCircle size={10} className="text-blue-400 animate-pulse" />{" "}
               The interface updates instantly when you choose a room.
             </div>
           </div>

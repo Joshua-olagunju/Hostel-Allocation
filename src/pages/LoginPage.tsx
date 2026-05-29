@@ -198,7 +198,7 @@ export const LoginPage = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-8 sm:px-6 lg:px-8">
             <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-8 shadow-2xl sm:p-10">
               <div className="mb-6 flex flex-col items-center text-center">
-                <FaCheckCircle className="mb-4 text-5xl text-emerald-500" />
+                <FaCheckCircle className="mb-4 text-5xl text-blue-400" />
                 <h2 className="text-2xl font-semibold text-slate-900">
                   {successModalType === "login"
                     ? "Login successful!"
@@ -207,9 +207,9 @@ export const LoginPage = () => {
                 <p className="mt-2 text-sm text-slate-600">{successMessage}</p>
               </div>
               <div className="flex items-center justify-center gap-2 text-sm text-slate-700">
-                <div className="h-2 w-2 animate-bounce rounded-full bg-emerald-500"></div>
+                <div className="h-2 w-2 animate-bounce rounded-full bg-blue-400"></div>
                 <span>Please wait...</span>
-                <div className="animation-delay-200 h-2 w-2 animate-bounce rounded-full bg-emerald-500"></div>
+                <div className="animation-delay-200 h-2 w-2 animate-bounce rounded-full bg-blue-400"></div>
               </div>
             </div>
           </div>
@@ -217,9 +217,9 @@ export const LoginPage = () => {
 
         <div className="flex-1    hidden lg:block">
           <img
-            src="/Rectangle 8.png"
+            src="/alex-tyson-5JjP9pGtD2k-unsplash.jpg"
             alt="Hostel login illustration"
-            className="h-auto  w-full object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
 
@@ -231,7 +231,7 @@ export const LoginPage = () => {
                   ? "Admin Sign up"
                   : "Admin Login"
                 : isSignup
-                  ? "Create your hostel account"
+                  ? "Create Your Hostel Account"
                   : "Hostel Allocation Login"
             }
             description={
@@ -249,40 +249,40 @@ export const LoginPage = () => {
 
               <form className="space-y-5" onSubmit={handleSubmit}>
                 <label className="block text-sm text-slate-700">
-                  Email address
+                  Email address <span className="text-blue-400">*</span>
                   <input
                     type="email"
                     required
                     value={email}
                     placeholder="Enter Your Email Address"
                     onChange={(event) => setEmail(event.target.value)}
-                    className="mt-3 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                    className="mt-3 w-full rounded-3xl border border-slate-200   px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
                   />
                 </label>
 
                 {!isAdminMode && isSignup ? (
                   <>
                     <label className="block text-sm text-slate-700">
-                      Full name
+                      Full name <span className="text-blue-400">*</span>
                       <input
                         type="text"
                         required
                         value={name}
                         placeholder="Enter Your Full Name"
                         onChange={(event) => setName(event.target.value)}
-                        className="mt-3 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                        className="mt-3 w-full rounded-3xl border border-slate-200   px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
                       />
                     </label>
                   </>
                 ) : null}
 
                 <label className="block text-sm text-slate-700">
-                  Password
+                  Password <span className="text-blue-400">*</span>
                   <div className="relative mt-3">
                     <input
                       type={showPassword ? "text" : "password"}
                       required
-                      minLength={8}
+                      minLength={isSignup ? 8 : undefined}
                       value={isSignup ? signupPassword : loginPassword}
                       onClick={handlePasswordClick}
                       placeholder="Enter Your Password"
@@ -293,7 +293,7 @@ export const LoginPage = () => {
                           setLoginPassword(event.target.value);
                         }
                       }}
-                      className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
                     />
                     <button
                       type="button"
@@ -321,7 +321,7 @@ export const LoginPage = () => {
                       setError(null);
                       setShowAdminPadlock(false);
                     }}
-                    className="flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-emerald-500"
+                    className="flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-400"
                   >
                     <AiFillLock size={18} />
                     Admin access unlocked
@@ -331,18 +331,18 @@ export const LoginPage = () => {
                 {!isAdminMode && isSignup ? (
                   <>
                     <label className="block text-sm text-slate-700">
-                      Confirm password
+                      Confirm password <span className="text-blue-400">*</span>
                       <div className="relative mt-3">
                         <input
                           type={showConfirmPassword ? "text" : "password"}
                           required
-                          minLength={8}
+                          minLength={isSignup ? 8 : undefined}
                           value={confirmPassword}
-                            placeholder="Enter Your Password"
+                          placeholder="Enter Your Password"
                           onChange={(event) =>
                             setConfirmPassword(event.target.value)
                           }
-                          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
                         />
                         <button
                           type="button"
@@ -366,13 +366,14 @@ export const LoginPage = () => {
                     </label>
 
                     <label className="block text-sm text-slate-700">
-                      Matric number
+                      Matric number <span className="text-blue-400">*</span>
                       <input
                         type="text"
                         required
                         value={matricNo}
+                        placeholder="Enter Your Matric Number"
                         onChange={(event) => setMatricNo(event.target.value)}
-                        className="mt-3 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-100 focus:ring-2 focus:ring-emerald-500/20"
+                        className="mt-3 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
                       />
                     </label>
                   </>
@@ -386,12 +387,17 @@ export const LoginPage = () => {
                 ) : null}
 
                 {successMessage ? (
-                  <p className="text-sm text-emerald-700">{successMessage}</p>
+                  <p className="text-sm text-blue-700">{successMessage}</p>
                 ) : null}
 
+                {!isSignup && (
+                  <p className="text-sm text-blue-400 text-sm underline cursor-pointer">
+                    Forget password?
+                  </p>
+                )}
                 <button
                   type="submit"
-                  className="!text-sm inline-flex w-full items-center justify-center gap-2 rounded-3xl bg-gray-300 px-5 py-3 text-sm font-semibold text-slate-950 transition-all hover:bg-emerald-400 !text-[#000000] !hover:text-[#ffffff]"
+                  className="!text-sm inline-flex w-full items-center justify-center gap-2 rounded-3xl bg-blue-400 !text-white px-5 py-3 text-sm font-semibold text-slate-950 transition-all hover:bg-blue-400   !hover:text-[#ffffff]"
                 >
                   <IoMdLogIn size={20} /> {submitText}
                 </button>
@@ -410,7 +416,7 @@ export const LoginPage = () => {
                           setConfirmPassword("");
                           setMatricNo("");
                         }}
-                        className="font-semibold underline text-emerald-600 hover:text-emerald-500"
+                        className="font-semibold underline !text-blue-400 hover:text-blue-500"
                       >
                         Login
                       </button>
@@ -426,7 +432,7 @@ export const LoginPage = () => {
                           setSuccessMessage(null);
                           setLoginPassword("");
                         }}
-                        className="font-semibold underline text-emerald-600 hover:text-emerald-500"
+                        className="font-semibold underline !text-blue-400 hover:text-blue-500"
                       >
                         Sign up
                       </button>

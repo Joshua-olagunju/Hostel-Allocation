@@ -18,7 +18,7 @@ export const RoomCard = ({ room, studentRoomId, onSelect }: RoomCardProps) => {
         isFull
           ? "border-slate-200 bg-slate-50 text-slate-500/80"
           : selected
-            ? "border-emerald-400 bg-emerald-50"
+            ? "border-blue-400 bg-blue-50"
             : "border-slate-200 bg-white"
       } `}
     >
@@ -41,7 +41,7 @@ export const RoomCard = ({ room, studentRoomId, onSelect }: RoomCardProps) => {
             Full
           </span>
         ) : selected ? (
-          <span className="rounded-sm bg-emerald-500/10 px-3 py-2  text-xs text-emerald-500">
+          <span className="rounded-sm bg-blue-400/10 px-3 py-2 text-xs text-blue-400">
             Selected
           </span>
         ) : null}
@@ -51,11 +51,11 @@ export const RoomCard = ({ room, studentRoomId, onSelect }: RoomCardProps) => {
         type="button"
         disabled={isFull}
         onClick={() => onSelect(room.id)}
-        className={`mt-auto rounded-md px-4 py-3 !text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-emerald-400 ${
+        className={`mt-auto rounded-md px-4 py-3 !text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-400 ${
           isFull
             ? "cursor-not-allowed bg-slate-100 text-slate-400"
             : selected
-              ? "bg-emerald-500 text-white hover:bg-emerald-400"
+              ? "bg-blue-400 text-white hover:bg-blue-400/90"
               : "bg-slate-100 text-slate-950 hover:bg-slate-200"
         }`}
       >

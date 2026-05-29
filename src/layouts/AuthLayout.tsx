@@ -22,7 +22,7 @@ export const AuthLayout = ({
             Hostel allocation
           </p>
           <div className="flex items-center justify-center gap-2">
-            <h1 className="text-3xl font-semibold  text-emerald-500  sm:text-4xl">
+            <h1 className="text-3xl font-bold   text-blue-400 ">
               {title}
             </h1>
             {adminIconClick && (
