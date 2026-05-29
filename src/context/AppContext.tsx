@@ -1,7 +1,9 @@
+import axios from "axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { loadFromStorage, saveToStorage } from "../utils/storage";
 import { mockRooms } from "../data/rooms";
-import { mockStudents } from "../data/students";
+import { loginStudent as apiLoginStudent, loginAdmin as apiLoginAdmin } from "../api/auth";
+import { getStudents } from "../api/students";
 import type { AppState, Room, Student, UserSession } from "../types";
 
 const STORAGE_KEY = "hostel-allocation-state";
@@ -11,8 +13,8 @@ interface AppContextValue {
   students: Student[];
   rooms: Room[];
   user: UserSession | null;
-  loginStudent: (email: string, password: string) => string | null;
-  loginAdmin: (email: string, password: string) => string | null;
+  loginStudent: (email: string, password: string) => Promise<string | null>;
+  loginAdmin: (email: string, password: string) => Promise<string | null>;
   logout: () => void;
   selectRoom: (roomId: string) => void;
   togglePaymentStatus: (studentId: string) => void;
@@ -20,11 +22,8 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
-const ADMIN_EMAIL = "admin@hostel.com";
-const ADMIN_PASSWORD = "admin123";
-
 const initialState: AppState = {
-  students: mockStudents,
+  students: [],
   rooms: mockRooms,
 };
 
@@ -39,19 +38,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [students, setStudents] = useState<Student[]>(() => {
     const saved = loadFromStorage<AppState>(STORAGE_KEY);
     if (!saved?.students) return initialState.students;
-
-    const savedMap = new Map(
-      saved.students.map((student) => [student.id, student]),
-    );
-    const merged = [...saved.students];
-
-    for (const student of mockStudents) {
-      if (!savedMap.has(student.id)) {
-        merged.push(student);
-      }
-    }
-
-    return merged;
+    return saved.students;
   });
   const [rooms, setRooms] = useState<Room[]>(() => {
     const saved = loadFromStorage<AppState>(STORAGE_KEY);
@@ -84,22 +71,64 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user]);
 
-  const loginStudent = (email: string, password: string) => {
-    const student = students.find((entry) => entry.email === email.trim());
-    if (!student) return "No student account found for this email.";
-    if (student.password !== password) return "Incorrect student password.";
-    if (student.paymentStatus !== "paid")
-      return "You have not paid your fees. Please contact administration.";
-    const session = buildStudentSession(student);
-    setUser(session);
-    return null;
+  const loginStudent = async (email: string, password: string) => {
+    try {
+      const res = await apiLoginStudent({ email, password });
+      const student = res.data.student;
+      if (!student) {
+        return "Student login failed.";
+      }
+      const session: UserSession = {
+        type: "student",
+        id: student._id || student.id,
+        name: student.name,
+        email: student.email,
+      };
+      setUser(session);
+      return null;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        return error.response?.data?.message || "Student login failed.";
+      }
+      return "Student login failed.";
+    }
   };
 
-  const loginAdmin = (email: string, password: string) => {
-    if (email.trim() !== ADMIN_EMAIL) return "Admin email does not match.";
-    if (password !== ADMIN_PASSWORD) return "Admin password is incorrect.";
-    setUser({ type: "admin", name: "Hostel Admin", email: ADMIN_EMAIL });
-    return null;
+  const loginAdmin = async (email: string, password: string) => {
+    try {
+      const res = await apiLoginAdmin({ email, password });
+      const admin = res.data.admin;
+      if (!admin) {
+        return "Admin login failed.";
+      }
+      setUser({ type: "admin", name: "Hostel Admin", email: admin.email });
+
+      // Fetch real students from backend for admin view
+      try {
+        const studentsRes = await getStudents();
+        const fetched: any[] = studentsRes.data.students || [];
+        const mapped = fetched.map((s) => ({
+          id: s._id || s.id,
+          name: s.name || "",
+          email: s.email || "",
+          password: "",
+          paymentStatus: s.paymentStatus || "unpaid",
+          matricNo: s.matricNo || "",
+          roomId: s.roomId || null,
+        }));
+        setStudents(mapped);
+      } catch (err) {
+        // ignore fetch errors here; admin still logged in
+        console.warn("Failed to fetch students after admin login", err);
+      }
+
+      return null;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        return error.response?.data?.message || "Admin login failed.";
+      }
+      return "Admin login failed.";
+    }
   };
 
   const logout = () => {

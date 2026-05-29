@@ -37,3 +37,7 @@ select {
 button {
   cursor: pointer;
 }
+
+::placeholder{
+  font-size: smaller;
+}

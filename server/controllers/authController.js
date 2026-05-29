@@ -1,4 +1,6 @@
+const bcrypt = require("bcryptjs");
 const Student = require("../models/Student");
+const Admin = require("../models/Admin");
 
 // ==========================
 // SIGNUP CONTROLLER
@@ -7,27 +9,27 @@ const signupStudent = async (req, res) => {
   try {
     const { name, email, password, matricNo } = req.body;
 
-    // 1. check if student already exists
     const existingStudent = await Student.findOne({ email });
-
     if (existingStudent) {
       return res.status(400).json({
         message: "Student already exists",
       });
     }
 
-    // 2. create new student
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newStudent = await Student.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       matricNo,
     });
 
-    // 3. return success response
+    const studentResponse = newStudent.toObject();
+    delete studentResponse.password;
+
     res.status(201).json({
       message: "Student created successfully",
-      student: newStudent,
+      student: studentResponse,
     });
   } catch (error) {
     res.status(500).json({
@@ -40,12 +42,9 @@ const signupStudent = async (req, res) => {
 // ==========================
 // LOGIN CONTROLLER
 // ==========================
-
 const loginStudent = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // 1. check if student exists
     const student = await Student.findOne({ email });
 
     if (!student) {
@@ -54,14 +53,13 @@ const loginStudent = async (req, res) => {
       });
     }
 
-    // 2. check password
-    if (student.password !== password) {
+    const passwordMatches = await bcrypt.compare(password, student.password);
+    if (!passwordMatches && student.password !== password) {
       return res.status(400).json({
         message: "Invalid password",
       });
     }
 
-    // 3. check payment status
     if (student.paymentStatus !== "paid") {
       return res.status(403).json({
         message:
@@ -69,10 +67,12 @@ const loginStudent = async (req, res) => {
       });
     }
 
-    // 4. success login
+    const studentResponse = student.toObject();
+    delete studentResponse.password;
+
     res.status(200).json({
       message: "Login successful, Please wait",
-      student,
+      student: studentResponse,
     });
   } catch (error) {
     res.status(500).json({
@@ -82,4 +82,72 @@ const loginStudent = async (req, res) => {
   }
 };
 
-module.exports = { signupStudent, loginStudent };
+// ==========================
+// ADMIN CONTROLLERS
+// ==========================
+const signupAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const existingAdmin = await Admin.findOne({ email });
+
+    if (existingAdmin) {
+      return res.status(400).json({
+        message: "Admin already exists",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newAdmin = await Admin.create({
+      email,
+      password: hashedPassword,
+    });
+
+    const adminResponse = newAdmin.toObject();
+    delete adminResponse.password;
+
+    res.status(201).json({
+      message: "Admin account created successfully",
+      admin: adminResponse,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+const loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const admin = await Admin.findOne({ email });
+
+    if (!admin) {
+      return res.status(400).json({
+        message: "There is no admin account associated with this email.",
+      });
+    }
+
+    const passwordMatches = await bcrypt.compare(password, admin.password);
+    if (!passwordMatches) {
+      return res.status(400).json({
+        message: "Invalid password",
+      });
+    }
+
+    const adminResponse = admin.toObject();
+    delete adminResponse.password;
+
+    res.status(200).json({
+      message: "Admin login successful",
+      admin: adminResponse,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { signupStudent, loginStudent, signupAdmin, loginAdmin };
