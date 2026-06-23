@@ -4,6 +4,7 @@ import { AppProvider } from './context/AppContext'
 import { LoginPage } from './pages/LoginPage'
 import { StudentDashboard } from './pages/StudentDashboard'
 import { AdminDashboard } from './pages/AdminDashboard'
+import { TermsPage } from './pages/TermsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { RequireAuth } from './components/RequireAuth'
 
@@ -29,6 +30,7 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route path="/terms" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

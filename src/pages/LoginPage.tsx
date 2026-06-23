@@ -37,6 +37,7 @@ export const LoginPage = () => {
   const [successModalType, setSuccessModalType] = useState<
     "signup" | "login" | null
   >(null);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const { loginStudent: loginStudentContext, loginAdmin: loginAdminContext } =
     useAppContext();
   const navigate = useNavigate();
@@ -211,6 +212,28 @@ export const LoginPage = () => {
                 <span>Please wait...</span>
                 <div className="animation-delay-200 h-2 w-2 animate-bounce rounded-full bg-blue-400"></div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {showForgotPasswordModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-8 sm:px-6 lg:px-8">
+            <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-8 shadow-2xl sm:p-10">
+              <div className="mb-6 flex flex-col items-center text-center">
+                <h2 className="text-2xl font-semibold text-slate-900">
+                  Forgot password
+                </h2>
+                <p className="mt-2 text-sm text-slate-600">
+                  Password recovery is coming soon. Please check back later.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowForgotPasswordModal(false)}
+                className="mt-4 inline-flex w-full items-center text-white justify-center rounded-3xl bg-blue-400 px-4 py-3 text-sm font-semibold !text-white transition hover:bg-blue-500"
+              >
+                Close
+              </button>
             </div>
           </div>
         )}
@@ -391,9 +414,13 @@ export const LoginPage = () => {
                 ) : null}
 
                 {!isSignup && (
-                  <p className="text-sm text-blue-400 text-sm underline cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotPasswordModal(true)}
+                    className="text-sm !text-blue-400 underline transition hover:text-blue-500"
+                  >
                     Forget password?
-                  </p>
+                  </button>
                 )}
                 <button
                   type="submit"
